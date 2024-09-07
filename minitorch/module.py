@@ -35,7 +35,7 @@ class Module:
         # walk through all modules and set them to training mode via dfs
         stack = [self]
         while stack:
-            curr = stack[-1]
+            curr = stack.pop(-1)
             curr.training = True
             for m in curr._modules.values():
                 stack.append(m)
@@ -45,7 +45,7 @@ class Module:
         # TODO: Implement for Task 0.4.
         stack = [self]
         while stack:
-            curr = stack[-1]
+            curr = stack.pop(-1)
             curr.training = False
             for m in curr._modules.values():
                 stack.append(m)
@@ -59,12 +59,30 @@ class Module:
 
         """
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        np = []
+        stack = [self]
+        while stack:
+            curr = stack.pop(-1)
+            for k, m in curr._modules.items():
+                m_np = dict(m.named_parameters())
+                for name, val in m_np.items():
+                    np.append((f"{k}.{name}", val))
+            for k, v in curr._parameters.items():
+                np.append((k, v))
+        return np
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        p = []
+        stack = [self]
+        while stack:
+            curr = stack.pop(-1)
+            for v in curr._parameters.values():
+                p.append(v)
+            for m in curr._modules.values():
+                stack.append(m)
+        return p
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
@@ -83,7 +101,7 @@ class Module:
         self.__dict__["_parameters"][k] = val
         return val
 
-    def __setattr__(self, key: str, val: Parameter) -> None:
+    def __setattr__(self, key: str, val: Optional[Parameter | Module]) -> None:
         if isinstance(val, Parameter):
             self.__dict__["_parameters"][key] = val
         elif isinstance(val, Module):
