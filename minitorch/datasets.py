@@ -21,6 +21,14 @@ class Graph:
 
 
 def simple(N):
+    """Lable only depends on x-coordinate. Y = 1 iff x < 0.5
+
+    Args:
+        N (_type_): number of points
+
+    Returns:
+        _type_: _description_
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -30,6 +38,14 @@ def simple(N):
 
 
 def diag(N):
+    """Diagonal points. Y = 1 iff x1 + x2 < 0.5, so the perfect line is x1 + x2 = 0.5
+
+    Args:
+        N (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -39,6 +55,14 @@ def diag(N):
 
 
 def split(N):
+    """Can't be learned by MLP. two classes are spearated into 3 parts in a 2-D space.
+
+    Args:
+        N (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -48,6 +72,14 @@ def split(N):
 
 
 def xor(N):
+    """Classical XOR problem. Can't be solved by MLP
+
+    Args:
+        N (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -57,6 +89,14 @@ def xor(N):
 
 
 def circle(N):
+    """Circular points
+
+    Args:
+        N (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -67,19 +107,35 @@ def circle(N):
 
 
 def spiral(N):
+    """Even worse
+
+    Args:
+        N (_type_): _description_
+    """
 
     def x(t):
         return t * math.cos(t) / 20.0
 
     def y(t):
         return t * math.sin(t) / 20.0
-    X = [(x(10.0 * (float(i) / (N // 2))) + 0.5, y(10.0 * (float(i) / (N //
-        2))) + 0.5) for i in range(5 + 0, 5 + N // 2)]
-    X = X + [(y(-10.0 * (float(i) / (N // 2))) + 0.5, x(-10.0 * (float(i) /
-        (N // 2))) + 0.5) for i in range(5 + 0, 5 + N // 2)]
+
+    X = [
+        (x(10.0 * (float(i) / (N // 2))) + 0.5, y(10.0 * (float(i) / (N // 2))) + 0.5)
+        for i in range(5 + 0, 5 + N // 2)
+    ]
+    X = X + [
+        (y(-10.0 * (float(i) / (N // 2))) + 0.5, x(-10.0 * (float(i) / (N // 2))) + 0.5)
+        for i in range(5 + 0, 5 + N // 2)
+    ]
     y2 = [0] * (N // 2) + [1] * (N // 2)
     return Graph(N, X, y2)
 
 
-datasets = {'Simple': simple, 'Diag': diag, 'Split': split, 'Xor': xor,
-    'Circle': circle, 'Spiral': spiral}
+datasets = {
+    "Simple": simple,
+    "Diag": diag,
+    "Split": split,
+    "Xor": xor,
+    "Circle": circle,
+    "Spiral": spiral,
+}
